@@ -2,9 +2,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  PASSWORD_REGEX = /\A(?=.*?[a-z])(?=.*?\d)[a-z\d]+\z/i.freeze
-  NAME_REGEX     = /\A[ぁ-んァ-ン一-龥]+\z/.freeze
-  KANA_REGEX     = /\A[ァ-ヶー－]+\z/.freeze
+  PASSWORD_REGEX = /\A(?=.*?[a-z])(?=.*?\d)[a-z\d]+\z/i
+  NAME_REGEX     = /\A[ぁ-んァ-ン一-龥]+\z/
+  KANA_REGEX     = /\A[ァ-ヶー－]+\z/
 
   validates :nickname, presence: true
   validates :birth_date, presence: true
@@ -15,7 +15,7 @@ class User < ApplicationRecord
   validates :last_name_kana,  presence: true, format: { with: KANA_REGEX }
 
   # パスワードは「入力があるときだけ」英数字混合をチェック
-  validates :password, format: { with: PASSWORD_REGEX, message: "Include both letters and numbers" },
+  validates :password, format: { with: PASSWORD_REGEX, message: 'Include both letters and numbers' },
                        allow_nil: true
 
   # 6文字以上を要件として固定したいなら（Deviseに任せるなら不要）
