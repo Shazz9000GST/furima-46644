@@ -2,8 +2,7 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
 
   def index
-    # トップページ想定
-    @items = Item.order(created_at: :desc)
+    @items = Item.includes(:user).order('created_at DESC')
   end
 
   def new
