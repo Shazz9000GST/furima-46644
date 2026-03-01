@@ -1,6 +1,6 @@
 class Item < ApplicationRecord
   belongs_to :user
-  # has_one :purchase
+  has_one :purchase
   has_one_attached :image
 
   extend ActiveHash::Associations::ActiveRecordExtensions
@@ -21,6 +21,10 @@ class Item < ApplicationRecord
     validates :delivery_time_id
     validates :price
   end
+
+  # def sold_out?
+    # purchase.present?
+  # end
 
   # 「---」(id=0) を弾く（エラーメッセージが重複しにくいように can't be blank に寄せる）
   validates :category_id, :condition_id, :shipping_fee_id, :prefecture_id, :delivery_time_id,
