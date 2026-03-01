@@ -4,70 +4,91 @@
 <div class="item-show">
   <div class="item-box">
     <h2 class="name">
-      <%= "商品名" %>
+      <%= @item.name %>
     </h2>
+
     <div class="item-img-content">
-      <%= image_tag "item-sample.png" ,class:"item-box-img" %>
-      <%# 商品が売れている場合は、sold outを表示しましょう %>
-      <div class="sold-out">
-        <span>Sold Out!!</span>
-      </div>
+      <% if @item.image.attached? %>
+        <%= image_tag @item.image, class:"item-box-img" %>
+      <% else %>
+        <%= image_tag "item-sample.png", class:"item-box-img" %>
+      <% end %>
+
+      <%# 商品が売れている場合は、sold outを表示しましょう（購入機能実装後に対応） %>
+      <%# <div class="sold-out"> %>
+      <%#   <span>Sold Out!!</span> %>
+      <%# </div> %>
       <%# //商品が売れている場合は、sold outを表示しましょう %>
     </div>
+
     <div class="item-price-box">
       <span class="item-price">
-        ¥ 999,999,999
+        ¥ <%= number_with_delimiter(@item.price) %>
       </span>
       <span class="item-postage">
-        <%= "配送料負担" %>
+        <%= @item.shipping_fee.name %>
       </span>
     </div>
 
-    <%# ログインしているユーザーと出品しているユーザーが、同一人物の場合と同一人物ではない場合で、処理を分けましょう %>
+    <%# ログインしているユーザーと出品しているユーザーが、同一人物の場合と同一人物ではない場合で、処理を分ける %>
+    <%# ログアウト状態の場合は、商品の販売状況に関わらず、「商品の編集」「削除」「購入画面に進む」ボタンが表示されない %>
+    <% if user_signed_in? %>
 
-    <%= link_to "商品の編集", "#", method: :get, class: "item-red-btn" %>
-    <p class="or-text">or</p>
-    <%= link_to "削除", "#", data: {turbo_method: :delete}, class:"item-destroy" %>
+      <%# 売却済み商品の場合はボタンを表示しない（購入機能実装後に対応） %>
+      <%# if @item.order.present? %>
+      <%#   # 何も表示しない %>
+      <%# else %>
 
+        <% if current_user.id == @item.user_id %>
+          <%# ログイン状態且つ、自身が出品した販売中商品の場合にのみ表示 %>
+          <%= link_to "商品の編集", edit_item_path(@item), class: "item-red-btn" %>
+          <p class="or-text">or</p>
+          <%= link_to "削除", item_path(@item),
+                data: { turbo_method: :delete, turbo_confirm: "削除しますか？" },
+                class:"item-destroy" %>
+        <% else %>
+          <%# ログイン状態且つ、自身が出品していない販売中商品の場合にのみ表示 %>
+          <%= link_to "購入画面に進む", "#", class:"item-red-btn" %>
+        <% end %>
 
-    <%# 商品が売れていない場合はこちらを表示しましょう %>
-    <%= link_to "購入画面に進む", "#" ,class:"item-red-btn"%>
-    <%# //商品が売れていない場合はこちらを表示しましょう %>
+      <%# end %>
+      <%# // 売却済み商品の場合はボタンを表示しない（購入機能実装後に対応） %>
 
-
-    <%# //ログインしているユーザーと出品しているユーザーが、同一人物の場合と同一人物ではない場合で、処理を分けましょう %>
+    <% end %>
 
     <div class="item-explain-box">
-      <span><%= "商品説明" %></span>
+      <span><%= @item.description %></span>
     </div>
+
     <table class="detail-table">
       <tbody>
         <tr>
           <th class="detail-item">出品者</th>
-          <td class="detail-value"><%= "出品者名" %></td>
+          <td class="detail-value"><%= @item.user.nickname %></td>
         </tr>
         <tr>
           <th class="detail-item">カテゴリー</th>
-          <td class="detail-value"><%= "カテゴリー名" %></td>
+          <td class="detail-value"><%= @item.category.name %></td>
         </tr>
         <tr>
           <th class="detail-item">商品の状態</th>
-          <td class="detail-value"><%= "商品の状態" %></td>
+          <td class="detail-value"><%= @item.condition.name %></td>
         </tr>
         <tr>
           <th class="detail-item">配送料の負担</th>
-          <td class="detail-value"><%= "発送料の負担" %></td>
+          <td class="detail-value"><%= @item.shipping_fee.name %></td>
         </tr>
         <tr>
           <th class="detail-item">発送元の地域</th>
-          <td class="detail-value"><%= "発送元の地域" %></td>
+          <td class="detail-value"><%= @item.prefecture.name %></td>
         </tr>
         <tr>
           <th class="detail-item">発送日の目安</th>
-          <td class="detail-value"><%= "発送日の目安" %></td>
+          <td class="detail-value"><%= @item.delivery_time.name %></td>
         </tr>
       </tbody>
     </table>
+
     <div class="option">
       <div class="favorite-btn">
         <%= image_tag "star.png" ,class:"favorite-star-icon" ,width:"20",height:"20"%>
@@ -95,6 +116,7 @@
       </button>
     </form>
   </div>
+
   <div class="links">
     <a href="#" class="change-item-btn">
       ＜ 前の商品
@@ -103,9 +125,9 @@
       後ろの商品 ＞
     </a>
   </div>
-  <%# 詳細ページで表示されている商品のカテゴリー名を表示しましょう %>
-  <a href="#" class="another-item"><%= "商品のカテゴリー名" %>をもっと見る</a>
-  <%# //詳細ページで表示されている商品のカテゴリー名を表示しましょう %>
+
+  <%# 詳細ページで表示されている商品のカテゴリー名を表示 %>
+  <a href="#" class="another-item"><%= @item.category.name %>をもっと見る</a>
 </div>
 
 <%= render "shared/footer" %>
