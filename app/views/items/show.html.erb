@@ -43,7 +43,7 @@
           <%# ログイン状態且つ、自身が出品した販売中商品の場合にのみ表示 %>
           <%= link_to "商品の編集", edit_item_path(@item), class: "item-red-btn" %>
           <p class="or-text">or</p>
-          <%= link_to "削除", "#",
+          <%= link_to "削除", item_path(@item),
                 data: { turbo_method: :delete, turbo_confirm: "削除しますか？" },
                 class:"item-destroy" %>
         <% else %>
