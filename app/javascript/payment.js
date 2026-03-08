@@ -17,19 +17,20 @@ document.addEventListener('turbo:load', () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const response = await payjp.createToken(numberElement);
+    try {
+      const response = await payjp.createToken(numberElement);
 
-    if (response.error) {
-      alert(response.error.message);
-      return;
+      if (!response.error) {
+        const tokenInput = document.createElement("input");
+        tokenInput.type = "hidden";
+        tokenInput.name = "token";
+        tokenInput.value = response.id;
+        form.appendChild(tokenInput);
+      }
+
+      form.submit();
+    } catch (error) {
+      form.submit();
     }
-
-    const tokenInput = document.createElement("input");
-    tokenInput.setAttribute("type", "hidden");
-    tokenInput.setAttribute("name", "token");
-    tokenInput.setAttribute("value", response.id);
-    form.appendChild(tokenInput);
-
-    form.submit();
   });
 });

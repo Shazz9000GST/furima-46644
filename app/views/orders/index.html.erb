@@ -33,6 +33,7 @@
 
     <%= form_with model: @purchase_form, url: item_purchases_path(@item), id: 'charge-form', class: 'transaction-form-wrap', data: { payjp_public_key: ENV["PAYJP_PUBLIC_KEY"] }, local: true do |f| %>
     <%= render "shared/error_messages", model: @purchase_form %>
+    <div id="card-errors" class="error-alert"></div>
     <%# カード情報の入力 %>
     <div class='credit-card-form'>
       <h1 class='info-input-haedline'>
