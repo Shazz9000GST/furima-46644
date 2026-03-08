@@ -17,17 +17,17 @@ document.addEventListener('turbo:load', () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const { token, error } = await payjp.createToken(numberElement);
+    const response = await payjp.createToken(numberElement);
 
-    if (error) {
-      alert(error.message);
+    if (response.error) {
+      alert(response.error.message);
       return;
     }
 
     const tokenInput = document.createElement("input");
     tokenInput.setAttribute("type", "hidden");
     tokenInput.setAttribute("name", "token");
-    tokenInput.setAttribute("value", token.id);
+    tokenInput.setAttribute("value", response.id);
     form.appendChild(tokenInput);
 
     form.submit();
