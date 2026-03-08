@@ -5,7 +5,7 @@ class PurchasesController < ApplicationController
 
   def index
     @purchase_form = PurchaseForm.new
-    render "orders/index"
+    render 'orders/index'
   end
 
   def create
@@ -16,7 +16,7 @@ class PurchasesController < ApplicationController
       @purchase_form.save
       redirect_to root_path
     else
-      render "orders/index", status: :unprocessable_entity
+      render 'orders/index', status: :unprocessable_entity
     end
   end
 
@@ -42,13 +42,13 @@ class PurchasesController < ApplicationController
   end
 
   def move_to_index
-    if current_user.id == @item.user_id || @item.purchase.present?
-      redirect_to root_path
-    end
+    return unless current_user.id == @item.user_id || @item.purchase.present?
+
+    redirect_to root_path
   end
 
   def pay_item
-    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
     Payjp::Charge.create(
       amount: @item.price,
       card: purchase_params[:token],
