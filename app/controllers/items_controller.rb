@@ -52,7 +52,9 @@ class ItemsController < ApplicationController
 
   # edit/updateできる条件:自分の出品かつ売却済みでない
   def move_to_root_unless_editable
-    return redirect_to root_path unless current_user.id == @item.user_id
+    if current_user.id != @item.user_id || @item.purchase.present?
+      redirect_to root_path
+    end
   end
 
   def item_params
