@@ -48,7 +48,7 @@
                 class:"item-destroy" %>
         <% else %>
           <%# ログイン状態且つ、自身が出品していない販売中商品の場合にのみ表示 %>
-          <%= link_to "購入画面に進む", "#", data: { turbo: false }, class:"item-red-btn" %>
+          <%= link_to "購入画面に進む", item_purchases_path(@item), data: { turbo: false }, class:"item-red-btn" %>
         <% end %>
 
       <%# end %>
