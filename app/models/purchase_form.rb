@@ -11,7 +11,7 @@ class PurchaseForm
     validates :phone_number
     validates :user_id
     validates :item_id
-    validates :token, presence: true
+    validates :token
   end
 
   validates :postal_code,
