@@ -5,6 +5,7 @@ class PurchasesController < ApplicationController
 
   def index
     @purchase_form = PurchaseForm.new
+    render "orders/index"
   end
 
   def create
@@ -15,7 +16,7 @@ class PurchasesController < ApplicationController
       @purchase_form.save
       redirect_to root_path
     else
-      render :index, status: :unprocessable_entity
+      render "orders/index", status: :unprocessable_entity
     end
   end
 
