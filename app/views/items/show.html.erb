@@ -14,11 +14,12 @@
         <%= image_tag "item-sample.png", class:"item-box-img" %>
       <% end %>
 
-      <%# 商品が売れている場合は、sold outを表示しましょう（購入機能実装後に対応） %>
-      <%# <div class="sold-out"> %>
-      <%#   <span>Sold Out!!</span> %>
-      <%# </div> %>
-      <%# //商品が売れている場合は、sold outを表示しましょう %>
+      <%# 商品が売れている場合は、sold outを表示 %>
+      <% if @item.purchase.present? %>
+        <div class="sold-out">
+          <span>Sold Out!!</span>
+        </div>
+      <% end %>
     </div>
 
     <div class="item-price-box">
@@ -34,10 +35,8 @@
     <%# ログアウト状態の場合は、商品の販売状況に関わらず、「商品の編集」「削除」「購入画面に進む」ボタンが表示されない %>
     <% if user_signed_in? %>
 
-      <%# 売却済み商品の場合はボタンを表示しない（購入機能実装後に対応） %>
-      <%# if @item.order.present? %>
-      <%#   # 何も表示しない %>
-      <%# else %>
+      <%# 売却済み商品の場合はボタンを表示しない %>
+      <% unless @item.purchase.present? %>
 
         <% if current_user.id == @item.user_id %>
           <%# ログイン状態且つ、自身が出品した販売中商品の場合にのみ表示 %>
@@ -48,12 +47,9 @@
                 class:"item-destroy" %>
         <% else %>
           <%# ログイン状態且つ、自身が出品していない販売中商品の場合にのみ表示 %>
-          <%= link_to "購入画面に進む", "#", class:"item-red-btn" %>
+          <%= link_to "購入画面に進む", item_purchases_path(@item), data: { turbo: false }, class:"item-red-btn" %>
         <% end %>
-
-      <%# end %>
-      <%# // 売却済み商品の場合はボタンを表示しない（購入機能実装後に対応） %>
-
+      <% end %>
     <% end %>
 
     <div class="item-explain-box">

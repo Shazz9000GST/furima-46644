@@ -145,9 +145,11 @@
                 <% end %>
 
                 <%# sold out は購入機能未実装なので今は非表示） %>
-                <%# if item.sold_out? %>
-                <%#   <div class='sold-out'><span>Sold Out!!</span></div> %>
-                <%# end %>
+                <% if item.purchase.present? %>
+                  <div class='sold-out'>
+                    <span>Sold Out!!</span>
+                  </div>
+                <% end %>
               </div>
 
               <div class='item-info'>

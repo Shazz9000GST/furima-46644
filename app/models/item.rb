@@ -1,6 +1,6 @@
 class Item < ApplicationRecord
   belongs_to :user
-  # has_one :purchase
+  has_one :purchase
   has_one_attached :image
 
   extend ActiveHash::Associations::ActiveRecordExtensions
@@ -23,7 +23,7 @@ class Item < ApplicationRecord
   end
 
   # def sold_out?
-    # purchase.present?
+  # purchase.present?
   # end
 
   # 「---」(id=0) を弾く（エラーメッセージが重複しにくいように can't be blank に寄せる）
