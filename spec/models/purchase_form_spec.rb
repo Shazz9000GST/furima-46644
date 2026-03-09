@@ -4,17 +4,7 @@ RSpec.describe PurchaseForm, type: :model do
   before do
     @user = FactoryBot.create(:user)
     @item = FactoryBot.create(:item)
-    @purchase_form = PurchaseForm.new(
-      postal_code: '123-4567',
-      prefecture_id: 1,
-      city: '横浜市',
-      addresses: '青山1-1-1',
-      building: '柳ビル103',
-      phone_number: '09012345678',
-      user_id: @user.id,
-      item_id: @item.id,
-      token: 'tok_abcdefghijk00000000000000000'
-    )
+    @purchase_form = FactoryBot.build(:purchase_form, user_id: @user.id, item_id: @item.id)
     sleep 0.1
   end
 
@@ -29,7 +19,7 @@ RSpec.describe PurchaseForm, type: :model do
         expect(@purchase_form).to be_valid
       end
 
-      it 'postal_codeが3桁ハイフン4桁なら購入できる' do
+      it 'postal_codeが3桁ハイフン4桁の形式なら購入できる' do
         @purchase_form.postal_code = '123-4567'
         expect(@purchase_form).to be_valid
       end
@@ -40,21 +30,21 @@ RSpec.describe PurchaseForm, type: :model do
       end
 
       it 'cityが存在すれば購入できる' do
-        @purchase_form.city = '渋谷区'
+        @purchase_form.city = '横浜市'
         expect(@purchase_form).to be_valid
       end
 
       it 'addressesが存在すれば購入できる' do
-        @purchase_form.addresses = '神南1-1-1'
+        @purchase_form.addresses = '青山1-1-1'
         expect(@purchase_form).to be_valid
       end
 
-      it 'phone_numberが10桁でも購入できる' do
+      it 'phone_numberが10桁の半角数字なら購入できる' do
         @purchase_form.phone_number = '0312345678'
         expect(@purchase_form).to be_valid
       end
 
-      it 'phone_numberが11桁でも購入できる' do
+      it 'phone_numberが11桁の半角数字なら購入できる' do
         @purchase_form.phone_number = '09012345678'
         expect(@purchase_form).to be_valid
       end
@@ -121,13 +111,13 @@ RSpec.describe PurchaseForm, type: :model do
       it 'phone_numberが9桁以下だと購入できない' do
         @purchase_form.phone_number = '090123456'
         @purchase_form.valid?
-        expect(@purchase_form.errors.full_messages).to include('Phone number is too short')
+        expect(@purchase_form.errors.full_messages).to include('Phone number is invalid. Input only number')
       end
 
       it 'phone_numberが12桁以上だと購入できない' do
         @purchase_form.phone_number = '090123456789'
         @purchase_form.valid?
-        expect(@purchase_form.errors.full_messages).to include('Phone number is too long')
+        expect(@purchase_form.errors.full_messages).to include('Phone number is invalid. Input only number')
       end
 
       it 'phone_numberにハイフンが含まれていると購入できない' do
