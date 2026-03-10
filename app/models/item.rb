@@ -22,9 +22,6 @@ class Item < ApplicationRecord
     validates :price
   end
 
-  # def sold_out?
-  # purchase.present?
-  # end
 
   # 「---」(id=0) を弾く（エラーメッセージが重複しにくいように can't be blank に寄せる）
   validates :category_id, :condition_id, :shipping_fee_id, :prefecture_id, :delivery_time_id,
